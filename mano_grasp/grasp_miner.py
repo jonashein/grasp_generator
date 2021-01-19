@@ -2,7 +2,9 @@ from graspit_process import GraspitProcess
 from graspit_scene import GraspitScene
 from kinematics import Kinematics
 from grasp_utils import *
-
+import numpy as np
+import random
+from tqdm import tqdm
 
 class GraspMiner:
     """ Grasp generator """
@@ -33,7 +35,7 @@ class GraspMiner:
         if change_speed:
             self._robot_names += ['ManoHand_v2', 'ManoHand_v3']
 
-    def __call__(self, object_name):
+    def __call__(self, object_name, plans=None, augmentGrasps=False):
         """Generated grasps for specific object
         
         Arguments:
@@ -46,12 +48,15 @@ class GraspMiner:
             self._process.start()
 
         grasps_all = []
-        for robot_name in self._robot_names:
+        for i, robot_name in enumerate(self._robot_names):
+            print("Robot {}: {}".format(i, robot_name))
             # load hand and body
             scene = GraspitScene(self._process.graspit, robot_name, object_name)
 
-            # plan grasps with a standart procedure
-            plans = scene.planGrasps(max_steps=self._max_steps)
+            # Load predefined grasps or use Eigengrasp planner
+            if plans is None:
+                # plan grasps with a standart procedure
+                plans = scene.planGrasps(max_steps=self._max_steps)
 
             # execute grasps with different euristics
             variants = (
@@ -61,14 +66,24 @@ class GraspMiner:
                 dict(approach=True, auto_open=True, full_open=True))
 
             grasps = []
-            for plan in plans:
+            pbar = tqdm(total=self._max_grasps, desc="Valid grasps")
+            while len(grasps) < self._max_grasps:
+                plan = random.choice(plans)
                 pose = plan['pose']
                 dofs = plan['dofs']
+
+                if augmentGrasps:
+                    poseSigma = 0.01
+                    dofsSigma = 0.05
+                    pose = pose + poseSigma * np.random.randn(*pose.shape)
+                    dofs = dofs + dofsSigma * np.random.randn(*dofs.shape)
 
                 for args in variants:
                     grasp = scene.grasp(pose, dofs, object_name, **args)
                     if grasp is not None:
                         grasps.append(grasp)
+                        pbar.update(1)
+            pbar.close()
 
             # sort by quality
             grasps.sort(key=lambda g: g['quality'], reverse=True)

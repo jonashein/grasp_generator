@@ -1,6 +1,6 @@
 import os
 from geometry_msgs.msg import Pose
-
+from graspit_interface.msg import SearchSpace
 from kinematics import Kinematics
 from grasp_utils import *
 
@@ -32,7 +32,7 @@ class GraspitScene:
         Returns:
             list -- list of planned grasps
         """
-        result = self._graspit.planGrasps(max_steps=max_steps)
+        result = self._graspit.planGrasps(max_steps=max_steps, search_space=SearchSpace(SearchSpace.SPACE_COMPLETE))
         return [grasp_from_msg(g) for g in result.grasps]
 
     def grasp(self, pose, dofs, body='', approach=False, auto_open=False, full_open=False):

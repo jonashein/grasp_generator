@@ -91,8 +91,8 @@ def squeezed(grasps):
         no_touch = [not (l & link_in_contact) for l in dependent]
         indicies = np.logical_and(squeezed, no_touch)
 
-        joints = [intermadiates[i] for i, cond in enumerate(indicies) if cond] + \
-            [distals[i] for i, cond in enumerate(indicies) if cond]
+        joints = [intermadiates[j] for j, cond in enumerate(indicies) if cond] + \
+            [distals[j] for j, cond in enumerate(indicies) if cond]
 
         if joints:
             yield i, joints

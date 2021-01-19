@@ -5,9 +5,8 @@ import os
 
 from math_utils import *
 
-CHAIN_NAME = collections.OrderedDict([('chain0', 'index'), ('chain1', 'mid'), ('chain2', 'ring'),
-                                      ('chain3', 'pinky'), ('chain4', 'thumb')])
-
+CHAIN_NAME = collections.OrderedDict([('chain0', 'index'), ('chain1', 'mid'), ('chain2', 'pinky'),
+                                      ('chain3', 'ring'), ('chain4', 'thumb')])
 
 class Kinematics:
     """ Kinematics converter GraspIt -> MANO """
