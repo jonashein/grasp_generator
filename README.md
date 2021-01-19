@@ -18,14 +18,14 @@ The generated grasps can be rendered with the [Grasp Renderer](https://github.co
 
 ## Setup
 
-### Prerequisites
+### Download and Install Prerequisites
 
 This package uses a ROS [interface](https://github.com/graspit-simulator/graspit_commander) for the GraspIt! simulator.
 To install and setup this interface follow the instructions at https://github.com/graspit-simulator/graspit_interface.
 
-### Download and install code
+### Download and Install Code
 
-```
+```sh
 git clone https://github.com/jonashein/grasp_generator.git
 cd grasp_generator
 python setup.py install --user --graspit_dir=$GRASPIT
@@ -33,25 +33,22 @@ python setup.py install --user --graspit_dir=$GRASPIT
 
 The MANO hand model will be automatically copied to `$GRASPIT` directory during the installation. 
 To copy a model without the code installation use the command:
-```
+```sh
 python setup.py --copy_model_only --graspit_dir=$GRASPIT
 ```
 
 ## Demo
-For your convenience, we have included exemplary grasp templates for our drill model in [examples/drill_grasp_templates.txt](examples/drill_grasp_templates.txt).
-<!-- as well as 
-[exemplary grasps](examples/drill_grasps.txt) which were generated using this grasp generator.
-These grasps where generated for the drill model which we used in our synthetic and real datasets. 
+We provide exemplary [grasp templates](grasp_templates/drill_grasp_templates.txt) for the 3D drill model used in our synthetic and real datasets.
+The 3D drill model can be downloaded [here](https://drive.google.com/file/d/1j3V2CTVEVPzI3Ybh159dfLtRXaoTqa00/view?usp=sharing).
 
-TODO download link for drill model
--->
+Follow the steps below to create new grasp templates, or use the provided grasp templates to directly generate augmented grasps.
 
-## Generate grasp templates
+## Generate Grasp Templates
 
 Start the [GraspIt!](http://graspit-simulator.github.io/) simulator and load the 3D model you wish to generate grasps for:
 ```File -> Import Object...```.
 
-Load the MANO hand model: ```File -> Import Robot...```. 
+Load the MANO hand model: Click on ```File -> Import Robot...``` and select ```./graspit/models/robots/ManoHand/ManoHand.xml```. 
 
 To generate a grasp template, manually the hand with the object such that they resemble a natural grasp.
 
@@ -62,22 +59,23 @@ Also, temporarily disabling the collision system can simplify the alignment.
 Capture the grasp via ```Database -> Grasp Capture... -> Capture```.
 Repeat these steps until a sufficient number of grasp templates are captured.
 
-Save the recorded grasp templates via ```Save to file...```.
+Save the recorded grasp templates via ```Save to file...```. 
+The stored file should have the same format as the [exemplary grasp templates](grasp_templates/drill_grasp_templates.txt).
 
-## Generate grasps
+## Generate Grasps
 
 Start [ROS master](http://wiki.ros.org/roscore) in one terminal:
-```
+```sh
 roscore
 ```
 
 Then in a second terminal start generator, which will augment the grasp templates and verify their physical plausibility via collision detection:
-```
+```sh
 python -m mano_grasp.generate_grasps --models PATH_TO_3D_OBJECT --grasps_file PATH_TO_GRASP_TEMPLATES --path_out PATH_TO_DATASET
 ```
 
 Use the `-- help` flag to see all available options:
-```
+```sh
 python -m mano_grasp.generate_grasps --help
 ```
 
