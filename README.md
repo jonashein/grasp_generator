@@ -1,7 +1,12 @@
 # Towards Markerless Surgical Tool and Hand Pose Estimation: Synthetic Grasp Generation
 
-- [Project page](http://medicalaugmentedreality.org/handobject.html)
-<!-- - [Paper](http://arxiv.org/abs/2004.13449) -->
+- [Project page](http://medicalaugmentedreality.org/handobject.html) <!-- - [Paper](http://arxiv.org/abs/2004.13449) -->
+- [Synthetic Grasp Generation](https://github.com/jonashein/grasp_generator)
+- [Synthetic Grasp Rendering](https://github.com/jonashein/grasp_renderer)
+- [Real Dataset Recording](https://github.com/jonashein/handobject_dataset_recorder)
+- [HandObjectNet Baseline](https://github.com/jonashein/handobjectnet_baseline)
+- [PVNet Baseline](https://github.com/jonashein/pvnet_baseline)
+- [Combined Model Baseline](https://github.com/jonashein/baseline_combination)
 
 This codebase is an adaptation of the original [Obman](https://hassony2.github.io/obman.html) pipeline to generate synthetic images of hand-object interactions.
 While the original pipeline relies on the Eigengrasp planner that is included in the [GraspIt!](http://graspit-simulator.github.io/) simulator, this fork allows to manually generate grasp templates which are then automatically augmented and verified in the simulator.
